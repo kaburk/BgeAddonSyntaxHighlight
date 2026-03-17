@@ -1,0 +1,186 @@
+/* BgeAddonSyntaxHighlight - type styles */
+
+[data-bgt='syntax-highlight'],
+.bge-sh-preview {
+	--bge-sh-line-number-color: #75715e;
+	--bge-sh-line-number-border: #3e3d32;
+}
+
+.bge-sh-field {
+	width: 100%;
+	max-width: 100%;
+}
+
+.bge-sh-field__row {
+	margin-top: 1rem;
+	width: 100%;
+}
+
+.bge-sh-field__row:first-child {
+	margin-top: 0;
+}
+
+.bge-sh-field__row > label {
+	display: block;
+	margin-bottom: 0.4rem;
+	font-weight: 600;
+}
+
+.bge-sh-field select,
+.bge-sh-field textarea,
+.bge-sh-preview {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 100%;
+}
+
+.bge-sh-code-input {
+	display: block;
+	width: 100%;
+	min-height: 18rem;
+	padding: 0.75rem;
+	resize: vertical;
+	font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+	font-size: 14px;
+	line-height: 1.6;
+	white-space: pre;
+	overflow-wrap: normal;
+	overflow-x: auto;
+	tab-size: 4;
+}
+
+[data-bgt='syntax-highlight'] .bge-sh-wrapper {
+	position: relative;
+}
+
+[data-bgt='syntax-highlight'] .bge-sh-source {
+	display: none !important;
+}
+
+.bge-sh-preview {
+	overflow: hidden;
+	border-radius: 4px;
+	background: #23241f;
+}
+
+[data-bgt='syntax-highlight'] pre,
+.bge-sh-preview pre {
+	margin: 0;
+	border-radius: 4px;
+	overflow-x: auto;
+}
+
+[data-bgt='syntax-highlight'] pre code.hljs,
+.bge-sh-preview pre code.hljs {
+	border-radius: 4px;
+}
+
+/*
+ * highlightjs-line-numbers.js が生成する .hljs-ln テーブルのスタイル。
+ * bge_style.css / bge_style_default.css の [data-bgb] table 系スタイルが
+ * 内部テーブルにも適用されてしまうため、!important で明示的に上書きする。
+ *   [data-bgb] table                    → (0,1,1)
+ *   [data-bgb] table tr:nth-child(n) td → (0,2,3)
+ *   @media { [data-bgb] table }         → メディアクエリ内で display:block 等
+ */
+[data-bgt='syntax-highlight'] .hljs-ln,
+.bge-sh-preview .hljs-ln {
+	display: table !important;
+	border-collapse: collapse !important;
+	border-spacing: 0 !important;
+	width: 100% !important;
+	margin: 0 !important;
+	table-layout: auto !important;
+	border: none !important;
+}
+
+[data-bgt='syntax-highlight'] .hljs-ln tbody,
+.bge-sh-preview .hljs-ln tbody {
+	display: table-row-group !important;
+	border: none !important;
+	background: transparent !important;
+}
+
+[data-bgt='syntax-highlight'] .hljs-ln tr,
+.bge-sh-preview .hljs-ln tr {
+	display: table-row !important;
+	background: transparent !important;
+	border: none !important;
+	border-top: none !important;
+	margin: 0 !important;
+}
+
+/* セル共通リセット: border / background / padding を BurgerEditor デフォルトから上書き */
+[data-bgt='syntax-highlight'] .hljs-ln th,
+[data-bgt='syntax-highlight'] .hljs-ln td,
+.bge-sh-preview .hljs-ln th,
+.bge-sh-preview .hljs-ln td {
+	display: table-cell !important;
+	background: transparent !important;
+	border: none !important;
+	border-top: none !important;
+	border-bottom: none !important;
+	border-left: none !important;
+	border-right: none !important;
+	padding: 0 !important;
+	text-align: inherit !important;
+	width: auto !important;
+	margin: 0 !important;
+	box-shadow: none !important;
+}
+
+/* highlightjs-line-numbers.js はスクリプトロード時に
+ * .hljs-ln-n:before { content: attr(data-line-number) } を
+ * メインドキュメントの <head> に追加するが、BurgerEditor の iframe には届かない。
+ * 管理画面ブロックでも行番号を表示するためここで明示的に定義する。 */
+[data-bgt='syntax-highlight'] .hljs-ln-n:before,
+.bge-sh-preview .hljs-ln-n:before {
+	content: attr(data-line-number);
+}
+
+/* 行番号列 */
+[data-bgt='syntax-highlight'] .hljs-ln-numbers,
+.bge-sh-preview .hljs-ln-numbers {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	text-align: right !important;
+	color: var(--bge-sh-line-number-color);
+	padding-right: 1em !important;
+	padding-left: 0.5em !important;
+	border-right: 1px solid var(--bge-sh-line-number-border) !important;
+	vertical-align: top;
+	white-space: nowrap;
+}
+
+/* コード列 */
+[data-bgt='syntax-highlight'] .hljs-ln-code,
+.bge-sh-preview .hljs-ln-code {
+	padding-left: 1em !important;
+	vertical-align: top;
+}
+
+/* コピーボタン */
+[data-bgt='syntax-highlight'] .bge-sh-copy-btn {
+	position: absolute;
+	top: 0.5em;
+	right: 0.5em;
+	padding: 0.25em 0.75em;
+	font-size: 0.8em;
+	line-height: 1.5;
+	color: #c9d1d9;
+	background: #30363d;
+	border: 1px solid #6e7681;
+	border-radius: 4px;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.2s;
+}
+
+[data-bgt='syntax-highlight'] .bge-sh-copy-btn:hover {
+	background: #484f58;
+}
+
+[data-bgt='syntax-highlight'] .bge-sh-wrapper:hover .bge-sh-copy-btn {
+	opacity: 1;
+}

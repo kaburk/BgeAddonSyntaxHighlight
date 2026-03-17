@@ -1,0 +1,62 @@
+:where([data-bgt='syntax-highlight']) {
+	.bge-sh-wrapper {
+		position: relative;
+	}
+
+	pre {
+		margin: 0;
+		border-radius: 4px;
+		overflow-x: auto;
+	}
+
+	pre code.hljs {
+		border-radius: 4px;
+	}
+
+	// highlightjs-line-numbers.js が生成するテーブル構造のスタイル
+	.hljs-ln {
+		border-collapse: collapse;
+		width: 100%;
+	}
+
+	.hljs-ln-numbers {
+		user-select: none;
+		text-align: right;
+		color: #6e7681;
+		padding-right: 1em;
+		padding-left: 0.5em;
+		border-right: 1px solid #30363d;
+		vertical-align: top;
+		white-space: nowrap;
+	}
+
+	.hljs-ln-code {
+		padding-left: 1em;
+		vertical-align: top;
+	}
+
+	// コピーボタン
+	.bge-sh-copy-btn {
+		position: absolute;
+		top: 0.5em;
+		right: 0.5em;
+		padding: 0.25em 0.75em;
+		font-size: 0.8em;
+		line-height: 1.5;
+		color: #c9d1d9;
+		background: #30363d;
+		border: 1px solid #6e7681;
+		border-radius: 4px;
+		cursor: pointer;
+		opacity: 0;
+		transition: opacity 0.2s;
+
+		&:hover {
+			background: #484f58;
+		}
+	}
+
+	.bge-sh-wrapper:hover .bge-sh-copy-btn {
+		opacity: 1;
+	}
+}

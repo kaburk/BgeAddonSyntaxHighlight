@@ -1,0 +1,1 @@
+# BgeAddonSyntaxHighlight plugin for baserCMS

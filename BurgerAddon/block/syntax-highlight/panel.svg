@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="17.85mm" height="13.84mm" viewBox="0 0 50.59 37.5">
+  <title>syntax-highlight</title>
+
+  <!-- 影 -->
+  <rect x="0" y="1.74" width="50.59" height="37.5" rx="5.06" fill="#1a1a16"/>
+  <!-- 本体背景 -->
+  <rect x="0" y="0" width="50.59" height="37.5" rx="5.06" fill="#23241f"/>
+
+  <!-- 行番号列の背景 -->
+  <rect x="0" y="0" width="11.5" height="37.5" rx="5.06" fill="#1c1d19"/>
+  <rect x="5.06" y="0" width="6.44" height="5.06" fill="#1c1d19"/>
+  <rect x="0" y="5.06" width="5.06" height="27.38" fill="#1c1d19"/>
+
+  <!-- 行番号列と本体の区切り線 -->
+  <line x1="11.5" y1="0" x2="11.5" y2="37.5" stroke="#3e3d32" stroke-width="0.7"/>
+
+  <!-- 行番号 -->
+  <text font-family="monospace" font-size="3.8" fill="#75715e" text-anchor="end">
+    <tspan x="10" y="10">1</tspan>
+    <tspan x="10" dy="5.2">2</tspan>
+    <tspan x="10" dy="5.2">3</tspan>
+    <tspan x="10" dy="5.2">4</tspan>
+    <tspan x="10" dy="5.2">5</tspan>
+    <tspan x="10" dy="5.2">6</tspan>
+  </text>
+
+  <!-- 行1: keyword + identifier + operator + value -->
+  <rect x="14" y="7" width="5" height="2.4" rx="0.7" fill="#f92672"/>
+  <rect x="20.2" y="7" width="7.5" height="2.4" rx="0.7" fill="#f8f8f2"/>
+  <rect x="29" y="7" width="1.8" height="2.4" rx="0.7" fill="#f8f8f2" opacity="0.45"/>
+  <rect x="32" y="7" width="9" height="2.4" rx="0.7" fill="#e6db74"/>
+
+  <!-- 行2: indent + keyword + string -->
+  <rect x="17" y="12.2" width="3.2" height="2.4" rx="0.7" fill="#f92672"/>
+  <rect x="21.5" y="12.2" width="11.5" height="2.4" rx="0.7" fill="#e6db74" opacity="0.9"/>
+  <rect x="34.2" y="12.2" width="1.8" height="2.4" rx="0.7" fill="#f8f8f2" opacity="0.45"/>
+
+  <!-- 行3: indent + function + args -->
+  <rect x="17" y="17.4" width="4" height="2.4" rx="0.7" fill="#a6e22e"/>
+  <rect x="22.2" y="17.4" width="1.8" height="2.4" rx="0.7" fill="#f8f8f2" opacity="0.45"/>
+  <rect x="25.2" y="17.4" width="9" height="2.4" rx="0.7" fill="#66d9ef" opacity="0.85"/>
+  <rect x="35.4" y="17.4" width="1.8" height="2.4" rx="0.7" fill="#f8f8f2" opacity="0.45"/>
+
+  <!-- 行4: keyword + value + punctuation -->
+  <rect x="14" y="22.6" width="2.5" height="2.4" rx="0.7" fill="#f8f8f2" opacity="0.45"/>
+  <rect x="17.8" y="22.6" width="6.5" height="2.4" rx="0.7" fill="#ae81ff"/>
+  <rect x="25.5" y="22.6" width="3.5" height="2.4" rx="0.7" fill="#f8f8f2" opacity="0.35"/>
+
+  <!-- 行5: コメント (薄め) -->
+  <rect x="14" y="27.8" width="16" height="2.4" rx="0.7" fill="#75715e" opacity="0.7"/>
+
+  <!-- 行6: 短い行 -->
+  <rect x="14" y="33" width="2.5" height="2.4" rx="0.7" fill="#f8f8f2" opacity="0.35"/>
+</svg>
