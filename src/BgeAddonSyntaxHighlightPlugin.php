@@ -1,13 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
+ * BgeAddonSyntaxHighlight
  *
- * @copyright     Copyright (c) NPO baser foundation
- * @link          https://basercms.net baserCMS Project
- * @since         5.1.0
- * @license       https://basercms.net/license/index.html MIT License
+ * @copyright     Copyright (c) kaburk
+ * @link          https://github.com/kaburk/BgeAddonSyntaxHighlight
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 namespace BgeAddonSyntaxHighlight;
