@@ -102,7 +102,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!wrapper) return;
             var code = wrapper.querySelector('code');
             if (!code) return;
-            navigator.clipboard.writeText(code.innerText).then(function() {
+            // data-sh-code 属性から生テキストを取得（行番号テキストの混入を防ぐ）
+            var text = code.getAttribute('data-sh-code') || code.innerText;
+            navigator.clipboard.writeText(text).then(function() {
                 btn.textContent = 'Copied!';
                 setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
             });

@@ -36,23 +36,45 @@ function isLineNumbersEnabled(value) {
     return value === true || value === 1 || value === '1' || value === 'true';
 }
 
+// BurgerEditor の ioFilter は "<" 始まりの値を HTML としてパースするため
+// "< ?php" 等が "< !--?php" に変換されてしまう。
+// sh-code は DOM 書き込み前に base64 エンコードし、読み出し時にデコードすることで回避する。
+function encodeCode(str) {
+    if (typeof str !== 'string') { return str; }
+    try {
+        return btoa(unescape(encodeURIComponent(str)));
+    } catch (e) {
+        return str;
+    }
+}
+
+function decodeCode(str) {
+    if (typeof str !== 'string' || !str) { return str; }
+    try {
+        return decodeURIComponent(escape(atob(str)));
+    } catch (e) {
+        // 旧形式データ（hljs HTML 等）のフォールバック
+        return normalizeSyntaxHighlightCode(str);
+    }
+}
+
 BgE.registerTypeModule('SyntaxHighlight', {
     beforeOpen: function (editorDialog, type, data) {
-        // BurgerEditor が data-bge を使って input.php のフォームに値を自動バインドする。
-        // code 要素には hljs が生成したマークアップが格納されている可能性があるため、
-        // テキストに正規化してからフォームへ流し込む。
-        if (!data || typeof data['sh-code'] !== 'string') {
-            return;
-        }
-
-        data['sh-code'] = normalizeSyntaxHighlightCode(data['sh-code']);
+        // BurgerEditor のフォーム自動バインドは ioFilter を1通るため、
+        // ここで data をデコードしても textarea に設定したときに再度夈止される。
+        // デコード処理は open() で行う。
     },
 
     open: function (editorDialog, type) {
-        // チェックボックスの状態を現在のブロックデータから復元する。
-        // BurgerEditor は checkbox を自動復元しないため open() で手動設定する
-        // （download-file addon と同じパターン）。
+        // type.export() から base64 のまま取得し、
+        // jQuery.val() で textarea に直接セットする。
+        // jQuery.val() は ioFilter を通らないため "< ?php" 等が届まれずに表示される。
+        // （BurgerEditor のフォーム自動バインドは open() より前に実行されるためここで上書きする）。
         var savedData = type.export();
+        editorDialog.$el.find('[name="bge-sh-code"]').val(decodeCode(savedData['sh-code'] || ''));
+
+        // チェックボックスの状態を現在のブロックデータから復元する。
+        // BurgerEditor は checkbox を自動復元しないため open() で手動設定する。
         editorDialog.$el.find('[name="bge-sh-line-numbers"]').prop(
             'checked',
             isLineNumbersEnabled(savedData['sh-line-numbers'])
@@ -90,10 +112,11 @@ BgE.registerTypeModule('SyntaxHighlight', {
     },
 
     beforeChange: function (newValues) {
-        // 完了ボタン押下時、code要素のinnerHTMLではなくフォームの textarea の値から取るため
-        // hljs マークアップが混入することはないが、念のため正規化する
+        // BurgerEditor が merge() で値を DOM に書き込む際に ioFilter を適用する。
+        // ioFilter は "<" 始まりの値を HTML としてパースしてしまうため、
+        // 事前に base64 エンコードして "<" が先頭に来ないようにする。
         if (typeof newValues['sh-code'] === 'string') {
-            newValues['sh-code'] = normalizeSyntaxHighlightCode(newValues['sh-code']);
+            newValues['sh-code'] = encodeCode(newValues['sh-code']);
         }
     },
 
@@ -101,9 +124,8 @@ BgE.registerTypeModule('SyntaxHighlight', {
         var $wrapper = $(type.el);
         var $pre = $wrapper.find('pre');
         var $code = $wrapper.find('code');
-        // value['sh-code'] には常に生コードが入っている（data-bge="sh-code" がついた
-        // code 要素の innerHTML として BurgerEditor が import/export する）
-        var rawCode = normalizeSyntaxHighlightCode(value['sh-code'] || '');
+        // data-sh-code 属性は base64 エンコードされているためデコードする
+        var rawCode = decodeCode(value['sh-code'] || '');
         var lang = value['sh-language'];
         var lineNumbers = isLineNumbersEnabled(value['sh-line-numbers']);
 
@@ -127,7 +149,8 @@ BgE.registerTypeModule('SyntaxHighlight', {
         // コピーボタンのイベントを紐付け（重複防止のため一度外す）
         $wrapper.find('.bge-sh-copy-btn').off('click').on('click', function () {
             var btn = this;
-            var text = $code[0].innerText;
+            // data-sh-code 属性から生テキストを取得（行番号テキストの混入を防ぐ）
+            var text = $code[0].getAttribute('data-sh-code') || $code[0].innerText;
             navigator.clipboard.writeText(text).then(function () {
                 btn.textContent = 'Copied!';
                 setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
