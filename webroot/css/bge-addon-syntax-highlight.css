@@ -184,3 +184,17 @@
 [data-bgt='syntax-highlight'] .bge-sh-wrapper:hover .bge-sh-copy-btn {
 	opacity: 1;
 }
+
+/* フロントスタイル */
+.bs-main-contents pre,
+.bge-contents pre,
+.cke_editable pre
+{
+	padding: 0px;
+	border: none;
+}
+pre code.hljs {
+	display: block;
+	overflow-x: auto;
+	padding: 1em
+}

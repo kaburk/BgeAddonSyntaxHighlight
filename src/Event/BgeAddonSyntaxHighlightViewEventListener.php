@@ -104,7 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!code) return;
             // data-sh-code 属性から生テキストを取得（行番号テキストの混入を防ぐ）
             var text = code.getAttribute('data-sh-code') || code.innerText;
-            navigator.clipboard.writeText(text).then(function() {
+            // data-sh-code 属性は base64 エンコードされているためデコードする
+            var rawCode = decodeCode(text || '');
+            navigator.clipboard.writeText(rawCode).then(function() {
                 btn.textContent = 'Copied!';
                 setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
             });

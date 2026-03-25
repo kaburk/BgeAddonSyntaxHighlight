@@ -151,7 +151,9 @@ BgE.registerTypeModule('SyntaxHighlight', {
             var btn = this;
             // data-sh-code 属性から生テキストを取得（行番号テキストの混入を防ぐ）
             var text = $code[0].getAttribute('data-sh-code') || $code[0].innerText;
-            navigator.clipboard.writeText(text).then(function () {
+            // data-sh-code 属性は base64 エンコードされているためデコードする
+            var rawCode = decodeCode(text || '');
+            navigator.clipboard.writeText(rawCode).then(function () {
                 btn.textContent = 'Copied!';
                 setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
             });
