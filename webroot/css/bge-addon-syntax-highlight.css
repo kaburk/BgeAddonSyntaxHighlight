@@ -193,8 +193,3 @@
 	padding: 0px;
 	border: none;
 }
-pre code.hljs {
-	display: block;
-	overflow-x: auto;
-	padding: 1em
-}
