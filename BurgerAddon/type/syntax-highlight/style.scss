@@ -19,8 +19,9 @@
 		width: 100%;
 	}
 
-	.hljs-ln-numbers {
+	.hljs-ln td.hljs-ln-numbers {
 		user-select: none;
+		width: 1%;
 		text-align: right;
 		color: #6e7681;
 		padding-right: 1em;
@@ -30,7 +31,7 @@
 		white-space: nowrap;
 	}
 
-	.hljs-ln-code {
+	.hljs-ln td.hljs-ln-code {
 		padding-left: 1em;
 		vertical-align: top;
 	}

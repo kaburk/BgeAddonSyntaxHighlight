@@ -36,6 +36,18 @@ function isLineNumbersEnabled(value) {
     return value === true || value === 1 || value === '1' || value === 'true';
 }
 
+// 保存済みの言語を取得する。
+// 言語のバインド（data-sh-language）が無い旧データは、
+// change() で付与した language-xxx クラスから復元する。
+function getSavedLanguage(savedData, type) {
+    if (typeof savedData['sh-language'] === 'string' && savedData['sh-language']) {
+        return savedData['sh-language'];
+    }
+    var code = type.el.querySelector('code');
+    var matched = code && /(?:^|\s)language-([\w-]+)/.exec(code.className);
+    return matched ? matched[1] : 'auto';
+}
+
 // BurgerEditor の ioFilter は "<" 始まりの値を HTML としてパースするため
 // "< ?php" 等が "< !--?php" に変換されてしまう。
 // sh-code は DOM 書き込み前に base64 エンコードし、読み出し時にデコードすることで回避する。
@@ -80,6 +92,15 @@ BgE.registerTypeModule('SyntaxHighlight', {
             isLineNumbersEnabled(savedData['sh-line-numbers'])
         );
 
+        // 言語を現在のブロックデータから復元する。
+        // 選択肢に無い値（自動検出で付与されたクラス等）は「自動検出」とする。
+        var $language = editorDialog.$el.find('[name="bge-sh-language"]');
+        var savedLanguage = getSavedLanguage(savedData, type);
+        $language.val(savedLanguage);
+        if ($language.val() !== savedLanguage) {
+            $language.val('auto');
+        }
+
         var updatePreview = function () {
             var lang = editorDialog.$el.find('[name="bge-sh-language"]').val();
             var code = editorDialog.$el.find('[name="bge-sh-code"]').val();
@@ -104,8 +125,9 @@ BgE.registerTypeModule('SyntaxHighlight', {
             }
         };
 
-        editorDialog.$el.find('[name="bge-sh-language"], [name="bge-sh-line-numbers"]').on('change', updatePreview);
-        editorDialog.$el.find('[name="bge-sh-code"]').on('input', updatePreview);
+        // ダイアログは使い回されるため、開くたびにハンドラが重複しないよう付け直す
+        editorDialog.$el.find('[name="bge-sh-language"], [name="bge-sh-line-numbers"]').off('change.bgesh').on('change.bgesh', updatePreview);
+        editorDialog.$el.find('[name="bge-sh-code"]').off('input.bgesh').on('input.bgesh', updatePreview);
 
         // 初回プレビュー
         updatePreview();

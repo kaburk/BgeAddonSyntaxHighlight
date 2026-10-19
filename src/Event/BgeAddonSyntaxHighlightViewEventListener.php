@@ -82,20 +82,37 @@ class BgeAddonSyntaxHighlightViewEventListener extends BcViewEventListener
         // フロントエンド初期化インラインスクリプト
         $initScript = <<<'JS'
 document.addEventListener('DOMContentLoaded', function() {
-    if (typeof hljs === 'undefined') return;
-    document.querySelectorAll('[data-bgb="syntax-highlight"] pre code').forEach(function(el) {
-        var pre = el.closest('pre');
-        var lineNumbers = pre && (
-            pre.getAttribute('data-line-numbers') === '1' ||
-            pre.getAttribute('data-line-numbers') === 'true'
-        );
-
-        hljs.highlightElement(el);
-
-        if (lineNumbers && typeof hljs.lineNumbersBlock === 'function') {
-            hljs.lineNumbersBlock(el);
+    // data-sh-code 属性は base64 エンコードされているためデコードする
+    function decodeCode(str) {
+        if (typeof str !== 'string' || !str) { return str; }
+        try {
+            return decodeURIComponent(escape(atob(str)));
+        } catch (e) {
+            return str;
         }
-    });
+    }
+
+    if (typeof hljs !== 'undefined') {
+        document.querySelectorAll('[data-bgb="syntax-highlight"] pre code').forEach(function(el) {
+            // 管理画面でハイライト済みの HTML が保存されているため、そのまま表示する。
+            // 再度 highlightElement() するとハイライト済みの警告が出るうえ、
+            // 行番号テーブルの textContent には改行が無く、コードが1行に潰れてしまう。
+            if (el.getAttribute('data-highlighted') === 'yes' || el.querySelector('table.hljs-ln')) {
+                return;
+            }
+            var pre = el.closest('pre');
+            var lineNumbers = pre && (
+                pre.getAttribute('data-line-numbers') === '1' ||
+                pre.getAttribute('data-line-numbers') === 'true'
+            );
+
+            hljs.highlightElement(el);
+
+            if (lineNumbers && typeof hljs.lineNumbersBlock === 'function') {
+                hljs.lineNumbersBlock(el);
+            }
+        });
+    }
     document.querySelectorAll('[data-bgb="syntax-highlight"] .bge-sh-copy-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var wrapper = btn.closest('.bge-sh-wrapper');

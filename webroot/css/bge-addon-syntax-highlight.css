@@ -138,12 +138,19 @@
 	content: attr(data-line-number);
 }
 
-/* 行番号列 */
-[data-bgt='syntax-highlight'] .hljs-ln-numbers,
-.bge-sh-preview .hljs-ln-numbers {
+/*
+ * 行番号列
+ * 上のセル共通リセット（.hljs-ln td）より詳細度を高くしないと
+ * padding / border / text-align が打ち消されるため td.hljs-ln-numbers で指定する。
+ * テーブルは width: 100% のため、行番号列を最小幅にしないと
+ * 余った幅が行番号列にも配分され、コードとの間が大きく空く。
+ */
+[data-bgt='syntax-highlight'] .hljs-ln td.hljs-ln-numbers,
+.bge-sh-preview .hljs-ln td.hljs-ln-numbers {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
+	width: 1% !important;
 	text-align: right !important;
 	color: var(--bge-sh-line-number-color);
 	padding-right: 1em !important;
@@ -154,9 +161,10 @@
 }
 
 /* コード列 */
-[data-bgt='syntax-highlight'] .hljs-ln-code,
-.bge-sh-preview .hljs-ln-code {
+[data-bgt='syntax-highlight'] .hljs-ln td.hljs-ln-code,
+.bge-sh-preview .hljs-ln td.hljs-ln-code {
 	padding-left: 1em !important;
+	text-align: left !important;
 	vertical-align: top;
 }
 
